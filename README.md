@@ -1,4 +1,30 @@
 # Mudanças climáticas
+## Esse é o tipo do meu projeto:
+> Terror 
+
+## As bibliotecas que vou usar:
+* Biblioteca 1
+* Biblioteca N
+
+## Referências úteis:
+- Referência 1
+- Referência N
+
+## Os artigos de orientação que me ajudarão durante o desenvolvimento
+Um breve comentário que ajudará você a lembrar sobre o que é o artigo... [uma palavra clicável que conterá o link] (https://link_do_artigo)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 >
 
