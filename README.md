@@ -7,8 +7,8 @@
 * Random
 
 ## Referências úteis:
-- Referência 1
-- Referência N
+- Five Nights at Freddy's (security Breach)
+- Five Nights at Freddy's (secret of the mimic)
 
 ## Os artigos de orientação que me ajudarão durante o desenvolvimento
 Um breve comentário que ajudará você a lembrar sobre o que é o artigo... [uma palavra clicável que conterá o link] (https://link_do_artigo)
