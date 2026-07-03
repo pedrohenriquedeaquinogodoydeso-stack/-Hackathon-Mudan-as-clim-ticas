@@ -3,8 +3,8 @@
 > Terror 
 
 ## As bibliotecas que vou usar:
-* Biblioteca 1
-* Biblioteca N
+* Pygame
+* Random
 
 ## Referências úteis:
 - Referência 1
