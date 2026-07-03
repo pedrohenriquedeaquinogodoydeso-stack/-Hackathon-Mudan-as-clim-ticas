@@ -28,9 +28,9 @@
 
 >
 
-
-OU UM JOGO DE TERROR QUE OS ANIMAIS SOFRERAM MUTAÇÕES COM A MUDANÇA CLIMÁTICA E VOCÊ PRECISA AGUENTAR 5 NOITES FAZENDO TASKS COMO SEPARAR TAMPINHAS
-
+UM JOGO DE TERROR QUE OS ANIMAIS SOFRERAM MUTAÇÕES COM A MUDANÇA CLIMÁTICA E VOCÊ PRECISA AGUENTAR 5 NOITES FAZENDO TASKS COMO SEPARAR TAMPINHAS
+-- Poluito é o mascote da Polui company. Ele é um robô criado para salvar o mundo da devastação, porém ele foi um projeto falho e caiu no esquecimento assim que
+o laboratório onde ocorriam experimentos envolvendo mudanças climáticas foi abandonado. O protagonista (Jeremias) entra no laboratório abandonado em busca de um abrigo (lá fora não é mais seguro)
 
 
 OUTRA IDEIA: Um modelo de visão computacional que
