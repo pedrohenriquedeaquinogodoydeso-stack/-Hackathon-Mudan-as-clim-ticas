@@ -37,3 +37,19 @@ OUTRA IDEIA: Um modelo de visão computacional que
 detecta o lixo e diz onde ele deve ser descartado.
 Ex: Vê uma coca-cola de lata e recomenda o lixo dos metais (e um site que gamefica e dá pontos
 por ajudar o meio ambiente) com esses pontos, daria para receber cupons para compras/filmes como incentivo (tipo doador de sangue).
+
+
+# Erros encontrados: 
+erros de som: [] variável global não definida, musica inicial parava (era por causa do else no update no "if" do som)
+erros de gameplay: [] personagem tem movimentação trocada no Xbox (cima é baixo, baixo é cima)
+[] o bloco de colisão tem que estar invisível e centralizado no lugar certo
+[] Quando o jogador clicar "E" ou "X" (no Xbox) ele entra em uma nova sala que vai ter um puzzle
+[] Tape: o jogador acha uma fita cassete que explica o puzzle abaixo
+[] primeiro puzzle: separação de tampinhas; o jogador separa devidamente as tampinhas em compartimentos das respectivas cores
+[] após entrar, o Poluito vai o seguir lentamente, usando a camuflagem de um polvo
+erros de tela: [] tempo de leitura muito curto
+
+
+
+
+
