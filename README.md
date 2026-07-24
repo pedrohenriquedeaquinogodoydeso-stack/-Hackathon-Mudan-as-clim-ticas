@@ -43,13 +43,25 @@ por ajudar o meio ambiente) com esses pontos, daria para receber cupons para com
 erros de som: [✅] variável global não definida, musica inicial parava (era por causa do else no update no "if" do som)
 erros de gameplay: [✅] personagem tem movimentação trocada no Xbox (cima é baixo, baixo é cima)
 [✅] o bloco de colisão tem que estar invisível e centralizado no lugar certo
-[] Quando o jogador clicar "E" ou "X" (no Xbox) ele entra em uma nova sala que vai ter um puzzle
-[] Tape: o jogador acha uma fita cassete que explica o puzzle abaixo
-[] primeiro puzzle: separação de tampinhas; o jogador separa devidamente as tampinhas em compartimentos das respectivas cores
-[] após entrar, o Poluito vai o seguir lentamente, usando a camuflagem de um polvo
+[✅] Quando o jogador clicar "E" ou "X" (no Xbox) ele entra em uma nova sala que vai ter um puzzle
+[✅] Tape: o jogador acha uma fita cassete que explica o puzzle abaixo
+[✅] primeiro puzzle: separação de tampinhas; o jogador separa devidamente as tampinhas em compartimentos das respectivas cores
+[✅] após entrar, o Poluito vai o seguir lentamente, usando a camuflagem de um polvo
 erros de tela: [✅] tempo de leitura muito curto
 
 
 
+# AVALIAÇÃO
+Título: No, Poluito!
+Um jogo para conscientizar as pessoas das mudanças climáticas usando estética de terror com mascothorror
+Autor: Pedro Henrique de Aquino Godoy de Souza
 
+Funções: conscientizar, entreter, divulgar e gerar uma experiência inesquecível
+Atualmente tem: Uma tela de início, sons ambiente, história, dois finais (contando com game over), um puzzle de separar tampinhas, uma perseguição.
 
+Instalação: Instalar o arquvo zip e unzipar ele, abrir no vscode configurado python 3.13, instalar no terminal as bibliotecas usadas no projeto.
+
+Feedback: Os usuários podem mandar o feedback no próprio github
+
+Conclusão:
+A importância do meu projeto: Ele consegue alcançar mais pessoas por ser um jogo divertido, o jogo se vende dessa forma, mas usa uma mensagem subliminar para mudar o jeito de pensar do jogador.
