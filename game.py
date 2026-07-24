@@ -32,6 +32,12 @@ nomes = {
     pygame.K_f:"F"
 }
 
+
+
+poluito_anim_timer = 0
+poluito_anim_frame = 0
+tampinhas_background = Actor("televisor_tampinhas.png")
+finalbom = Actor("finalbom.jpeg")
 gameover = Actor("gameover.png")
 codigo = "" 
 acertos = 0
@@ -66,11 +72,12 @@ textos = [
 button1 = pygame.Rect(0, 0, 100, 50)
 button2 = pygame.Rect(100,200, 50,20)
 
+
 def novo_desafio():
     global tecla_atual, cor_atual
 
-    tecla_atual = random.choice(teclas)
     cor_atual = random.choice(cores)
+    tecla_atual = random.choice(teclas)
 
 perigo1_background = Actor("peseguicao_1.png")
 perigo2_background = Actor("perseguicao_2.png")
@@ -78,7 +85,7 @@ perigo3_background = Actor("perseguitiones.png")
 ja_viu_cutsciene_terror = False
 caixa_monstro = Actor("poluito.png")
 #virar o png do poluito
-
+tela_selecao = 0
 novo_tamanho = (
     caixa_monstro.width // 2,
     caixa_monstro.height // 2
@@ -115,7 +122,15 @@ player = Actor("player.png")
 
 pygame.init()
 pygame.mixer.init()
+pygame.joystick.init()
 
+joystick_connected = pygame.joystick.get_count() > 0
+
+if joystick_connected:
+    joystick = pygame.joystick.Joystick(0)
+    joystick.init()
+
+    print("Controle:", joystick.get_name())
 its_raining = False
 chuva_sound = pygame.mixer.Sound(os.path.join("music", "rain.mp3"))
 raio_sound = pygame.mixer.Sound(os.path.join("music", "raio.mp3"))
@@ -188,7 +203,8 @@ teleport_monstro = None
 teleport_monstro_rect = None
 teleport_segunda_area = None
 teleport_segunda_area_rect = None
-
+fim_jogo = None
+fim_jogo_rect = None
 raio_tocado = False
 # try to find menu music at startup; user can drop a file named menu.ogg/menu.mp3 in project root or sounds/ or music/
 menu_music_file = audio.find_menu_music()
@@ -229,6 +245,8 @@ def ensure_controller():
     return joystick_connected
 
 ensure_controller()
+
+
 def get_controller_move():
     ensure_controller()
     if not joystick_connected or joystick is None:
@@ -327,13 +345,56 @@ def reset_player_position():
 
     teleport_segunda_area_rect = teleport_segunda_area.copy()
     #teleport_segunda_area_rect
-    start_tutorial()
+    global fim_jogo, fim_jogo_rect
+
+    if fim_jogo is None:
+        fim_jogo = pygame.Rect(0, 0, 100, 180)
+
+    fim_jogo.x = width - 20
+    fim_jogo.y = height // 2 + 20
+
+    fim_jogo_rect = fim_jogo.copy()
+    
 
 
 def set_input_mode(mode_name):
     global input_mode
     input_mode = mode_name
+def atualizar_sprite_poluito(nome):
+    caixa_monstro.image = nome
+    if nome == "poluito":
+        novo_tamanho = (
+            caixa_monstro.width // 2,
+            caixa_monstro.height // 2
+        )
 
+        caixa_monstro._orig_surf = pygame.transform.scale(
+            caixa_monstro._orig_surf,
+            novo_tamanho
+        )
+
+        caixa_monstro._surf = caixa_monstro._orig_surf.copy()
+        caixa_monstro._update_pos()
+        caixa_monstro._surf = pygame.transform.flip(
+            caixa_monstro._orig_surf.copy(), True, False
+        )
+    elif nome == "poluito2":
+
+        novo_tamanho = (
+            caixa_monstro.width // 8,
+            caixa_monstro.height // 8
+        )
+
+        caixa_monstro._orig_surf = pygame.transform.scale(
+            caixa_monstro._orig_surf,
+            novo_tamanho
+        )
+
+        caixa_monstro._surf = caixa_monstro._orig_surf.copy()
+        caixa_monstro._update_pos()
+        caixa_monstro._surf = pygame.transform.flip(
+            caixa_monstro._orig_surf.copy(), True, False
+        )
 
 def get_tutorial_surface():
     global tutorial_surface_cache, tutorial_frame_index, tutorial_frame_timer
@@ -703,11 +764,13 @@ def draw_puzzle():
         color="white")
 '''
 def draw_tela():
-    global button1, button2
+    global button1, button2, acertos
 
     width, height = screen.surface.get_size()
-
-    background.draw_background(screen, tela_background)
+    if codigo != "":
+        background.draw_background(screen, tela_background)#tampinhas_background
+    else:
+        background.draw_background(screen, tampinhas_background)#tela_background
 
     # ---------------- BOTÕES ----------------
 
@@ -756,45 +819,40 @@ def draw_tela():
             color="white"
         )
 
-        # ---------------- PUZZLE ----------------
+    # ---------------- PUZZLE ----------------
 
-        if puzzle_ativo:
+    if puzzle_ativo and texto_atual > 8:
 
-            pygame.draw.circle(
-                screen.surface,
-                cor_atual,
-                (width // 2, height // 2),
-                60
-            )
+        pygame.draw.circle(
+            screen.surface,
+            cor_atual,
+            (width // 2, height // 2),
+            60
+        )
 
-            screen.draw.text(
-                nomes[tecla_atual],
-                center=(width // 2, height // 2),
-                fontsize=90,
-                color="white"
-            )
-        if codigo != "":
-            # ---------------- CÓDIGO FINAL ----------------
-            screen.draw.text(
-                "CÓDIGO ENCONTRADO",
-                center=(width // 2, height // 2 - 55),
-                fontsize=28,
-                color="white"
-            )
+        screen.draw.text(
+            nomes[tecla_atual],
+            center=(width // 2, height // 2),
+            fontsize=90,
+            color="white"
+        )
+    if codigo != "":
+        # ---------------- CÓDIGO FINAL ----------------
+        screen.draw.text(
+            "A Porta ao lado foi",
+            center=(width // 2, height // 2 - 55),
+            fontsize=27,
+            color="white"
+        )
 
-            screen.draw.text(
-                codigo,
-                center=(width // 2, height // 2),
-                fontsize=60,
-                color="lime"
-            )
+        screen.draw.text(
+            "Aberta",
+            center=(width // 2, height // 2),
+            fontsize=60,
+            color="lime"
+        )
 
-            screen.draw.text(
-                "Anote este código.",
-                center=(width // 2, height // 2 + 55),
-                fontsize=22,
-                color="white"
-            )
+
 
   
 
@@ -848,10 +906,19 @@ def draw_corredor():
     
     if ja_viu_cutsciene_terror:
         caixa_monstro.draw()
-        
+    if fim_jogo_rect is not None:
+        pass
+        '''pygame.draw.rect(
+            screen.surface,
+            (0, 255, 0),
+            fim_jogo_rect,
+            2
+        )'''
+    
     player.draw()
     
-
+def draw_finalbom():
+    background.draw_background(screen, finalbom)
 
 def draw():
     screen.clear()
@@ -879,7 +946,8 @@ def draw():
         draw_game_over()
     elif mode == "corredor":
         draw_corredor()
-
+    elif mode == "finalbom":
+        draw_finalbom()
     
 def on_key_down(key):
     global mode, puzzle_ativo, tecla_atual, acertos
@@ -945,18 +1013,20 @@ def update(dt):
     global e_prompt_visible, its_raining
     global teleport_monstro_rect, teleport_monstro
     global loading_duration3, loading_timer3, cutscene_timer3, ja_viu_cutsciene_terror, monstro_parou
-    global hitbox, fim, player_rect, fita_vermelha
+    global hitbox, fim, player_rect, fita_vermelha, poluito_anim_timer, poluito_anim_frame, fita_pega
+    global fita_inserida, texto_atual, codigo, puzzle_ativo, acertos
     '''
-if mode == "game":
-    pygame.mixer.music.load(chuva_sound)
-    pygame.mixer.music.play(-1)
-else:
-    pygame.mixer.music.fadeout(1500)
-'''
+    if mode == "game":
+        pygame.mixer.music.load(chuva_sound)
+        pygame.mixer.music.play(-1)
+    else:
+        pygame.mixer.music.fadeout(1500)
+    '''
+
 
     its_raining = mode == "game"
-    
-    
+    monstro_antigo_x = caixa_monstro.x
+    monstro_antigo_y = caixa_monstro.y
     
     if mode == "loading":
         loading_timer += dt
@@ -1035,6 +1105,13 @@ else:
             tutorial_timer += dt
             if tutorial_timer >= tutorial_duration:
                 tutorial_visible = False
+        a_pressed = get_controller_button(0)
+
+        if e_prompt_visible and a_pressed and not controller_a_pressed_prev:
+            mode = "entrada"
+
+        controller_a_pressed_prev = a_pressed
+
     elif mode == "entrada":
         if not player_initialized:
             reset_player_position()
@@ -1106,7 +1183,30 @@ else:
             tutorial_timer += dt
             if tutorial_timer >= tutorial_duration:
                 tutorial_visible = False
+        a_pressed = get_controller_button(0)
+
+        if e_prompt_visible and a_pressed and not controller_a_pressed_prev:
+            mode = "puzzle"
+
+        controller_a_pressed_prev = a_pressed
+
+    elif mode == "tela":
+        if puzzle_ativo:
+            keys = pygame.key.get_pressed()
+
+            if keys[tecla_atual]:
+
+                acertos += 1
+
+                if acertos >= TOTAL_TECLAS:
+                    puzzle_ativo = False
+                    codigo = str(random.randint(1000,9999))
+
+                else:
+                    novo_desafio()
     elif mode == "puzzle":
+
+
 
         if not player_initialized:
             reset_player_position()
@@ -1158,7 +1258,11 @@ else:
              
             if player_rect.colliderect(novo_bloco_rect):
                 e_prompt_visible = True
+                a_pressed = get_controller_button(0)
+                if e_prompt_visible and a_pressed and not controller_a_pressed_prev:
+                    mode = "tela"
 
+                controller_a_pressed_prev = a_pressed
             else:
                 e_prompt_visible = False
         fita_vermelha_rect = pygame.Rect(
@@ -1180,9 +1284,19 @@ else:
                 
                 if codigo != "" and player_rect.colliderect(proxima_area_rect):
                     e_prompt_visible = True
-                    
+                    a_pressed = get_controller_button(0)
+                    if e_prompt_visible and a_pressed and not controller_a_pressed_prev:
+                        mode = "proxima_area"
+
+                    controller_a_pressed_prev = a_pressed
                 elif player_rect.colliderect(fita_vermelha_rect) and fita_pega == False:# TODOS ESTÃO DANDO CERTO deve ser draw
                     e_prompt_visible = True
+                    a_pressed = get_controller_button(0)
+                    if e_prompt_visible and a_pressed and not controller_a_pressed_prev:
+                        #PEGA A FITA
+                        fita_pega = True
+
+                    controller_a_pressed_prev = a_pressed
                     
                 else:
                     e_prompt_visible = False
@@ -1271,6 +1385,16 @@ else:
                 caixa_monstro.y += caixa_monstro_velocidade * dt
             elif caixa_monstro.centery > player.y:
                 caixa_monstro.y -= caixa_monstro_velocidade * dt
+            poluito_anim_timer += dt
+
+            if poluito_anim_timer >= 0.2:
+                poluito_anim_timer = 0
+                poluito_anim_frame = 1 - poluito_anim_frame
+
+            if poluito_anim_frame == 0:
+                atualizar_sprite_poluito("poluito")
+            else:
+                atualizar_sprite_poluito("poluito2")
             # Isso faz a hitbox acompanhar a posição atual do monstro com o mesmo recuo (-50)
         hitbox.x = caixa_monstro.x - 20
         hitbox.y = caixa_monstro.y - 20
@@ -1330,12 +1454,33 @@ else:
                 caixa_monstro.x += caixa_monstro_velocidade * dt
             else:
                 monstro_parou = True
+            poluito_anim_timer += dt
+
+            if poluito_anim_timer >= 0.2:
+                poluito_anim_timer = 0
+                poluito_anim_frame = 1 - poluito_anim_frame
+
+            if poluito_anim_frame == 0:
+                atualizar_sprite_poluito("poluito")
+            else:
+                atualizar_sprite_poluito("poluito2")
         hitbox.x = caixa_monstro.x - 20
         hitbox.y = caixa_monstro.y - 20
         if hitbox.colliderect(player_rect):#caixa_monstro._rect
             mode = "game_over"
             monstro_parou = True
-    
+        if fim_jogo_rect is not None:
+            player_rect = pygame.Rect(
+                int(player.x - player.width / 2),
+                int(player.y - player.height / 2),
+                player.width,
+                player.height
+            )
+
+            if player_rect.colliderect(fim_jogo_rect) and fim:
+                mode = "finalbom"
+                return
+        
 
 
     if mode == "menu":
@@ -1492,3 +1637,4 @@ def on_mouse_down(pos, button):
                     novo_desafio()
 
 pgzrun.go()
+
